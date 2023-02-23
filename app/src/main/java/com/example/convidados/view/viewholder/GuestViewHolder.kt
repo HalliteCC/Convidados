@@ -1,8 +1,14 @@
 package com.example.convidados.view.viewholder
 
-import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
 
-class GuestViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+import androidx.recyclerview.widget.RecyclerView
+import com.example.convidados.databinding.RowGuestBinding
+import com.example.convidados.model.GuestModel
+
+class GuestViewHolder(private var bind: RowGuestBinding) : RecyclerView.ViewHolder(bind.root) {
+
+    fun bind(guest: GuestModel) {
+        bind.textName.text = guest.name
+    }
 }

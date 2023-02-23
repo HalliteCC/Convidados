@@ -15,4 +15,5 @@
     <string name="present_radio">Present</string>
     <string name="absent_radio">absent</string>
     <string name="save">Save</string>
+    <string name="guest">Convidado</string>
 </resources>
