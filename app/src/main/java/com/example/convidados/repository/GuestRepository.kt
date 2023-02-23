@@ -97,7 +97,7 @@ class GuestRepository private constructor(context: Context) {
             val db = guestDataBase.readableDatabase
 
             //seleções
-            val selection = arrayOf(
+            val projection = arrayOf(
                 DataBaseConstants.COLUMNS.ID,
                 DataBaseConstants.COLUMNS.NAME,
                 DataBaseConstants.COLUMNS.PRESENCE
@@ -105,7 +105,7 @@ class GuestRepository private constructor(context: Context) {
 
             //realização e execução do cursor
             val cursor = db.query(
-                DataBaseConstants.GUEST.TABLE_NAME, selection,
+                DataBaseConstants.GUEST.TABLE_NAME, projection,
                 null, null, null, null, null
             )
 
@@ -139,18 +139,45 @@ class GuestRepository private constructor(context: Context) {
             //abertura do banco de dados
             val db = guestDataBase.readableDatabase
 
-            //seleções
-            val projection = arrayOf(
-                DataBaseConstants.COLUMNS.ID,
-                DataBaseConstants.COLUMNS.NAME,
-                DataBaseConstants.COLUMNS.PRESENCE
-            )
 
-            //realização e execução do cursor
-            val cursor = db.query(
-                DataBaseConstants.GUEST.TABLE_NAME, selection,
-                null, null, null, null, null
-            )
+            //realização e execução do cursor / critérios
+            val cursor = db.rawQuery("SELECT id, name, presence FROM Guest WHERE presence = 1", null)
+
+
+            //mapeamento dos dados
+            if (cursor != null && cursor.count > 0) {
+                while (cursor.moveToNext()) {
+
+                    val id = cursor.getInt(cursor.getColumnIndex(DataBaseConstants.COLUMNS.ID))
+                    val name = cursor.getString(cursor.getColumnIndex(DataBaseConstants.COLUMNS.NAME))
+                    val presence =
+                        cursor.getInt(cursor.getColumnIndex(DataBaseConstants.COLUMNS.PRESENCE))
+
+                    list.add(GuestModel(id, name, presence == 1))
+                }
+            }
+            //fechamento do cursor
+            cursor.close()
+
+        }catch (e: Exception){
+            return list
+        }
+        return list
+    }
+
+    fun getAbsent(): List<GuestModel> {
+
+        //definição da lista
+        val list = mutableListOf<GuestModel>()
+
+        try {
+            //abertura do banco de dados
+            val db = guestDataBase.readableDatabase
+
+
+            //realização e execução do cursor / critérios
+            val cursor = db.rawQuery("SELECT id, name, presence FROM Guest WHERE presence = 0", null)
+
 
             //mapeamento dos dados
             if (cursor != null && cursor.count > 0) {
