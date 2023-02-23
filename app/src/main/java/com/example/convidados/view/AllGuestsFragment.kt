@@ -27,7 +27,7 @@ class AllGuestsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, b: Bundle?
     ): View {
-        viewModel = ViewModelProvider(this).get(AllGuestsViewModel::class.java)
+        viewModel = ViewModelProvider(this)[AllGuestsViewModel::class.java]
 
         _binding = FragmentAllGuestsBinding.inflate(inflater, container, false)
 
@@ -35,7 +35,6 @@ class AllGuestsFragment : Fragment() {
         binding.recyclerAllGuests.layoutManager = LinearLayoutManager(context)
 
         //adpter
-
         binding.recyclerAllGuests.adapter = adapter
 
         viewModel.getAll()
@@ -51,12 +50,9 @@ class AllGuestsFragment : Fragment() {
     }
 
 
-
-
     private fun observe() {
         viewModel.guests.observe(viewLifecycleOwner) {
             //Lista de convidados
-
             adapter.updatedGuests(it)
         }
     }
