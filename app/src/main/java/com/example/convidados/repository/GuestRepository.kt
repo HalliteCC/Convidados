@@ -87,6 +87,48 @@ class GuestRepository private constructor(context: Context) {
 
     }
 
+    fun getAll(): List<GuestModel> {
+
+        //definição da lista
+        val list = mutableListOf<GuestModel>()
+
+        try {
+            //abertura do banco de dados
+            val db = guestDataBase.readableDatabase
+
+            //seleções
+            val selection = arrayOf(
+                DataBaseConstants.COLUMNS.ID,
+                DataBaseConstants.COLUMNS.NAME,
+                DataBaseConstants.COLUMNS.PRESENCE
+            )
+
+            //realização e execução do cursor
+            val cursor = db.query(
+                DataBaseConstants.GUEST.TABLE_NAME, selection,
+                null, null, null, null, null
+            )
+
+            //mapeamento dos dados
+            if (cursor != null && cursor.count > 0) {
+                while (cursor.moveToNext()) {
+
+                    val id = cursor.getInt(cursor.getColumnIndex(DataBaseConstants.COLUMNS.ID))
+                    val name = cursor.getString(cursor.getColumnIndex(DataBaseConstants.COLUMNS.NAME))
+                    val presence =
+                        cursor.getInt(cursor.getColumnIndex(DataBaseConstants.COLUMNS.PRESENCE))
+
+                    list.add(GuestModel(id, name, presence == 1))
+                }
+            }
+            //fechamento do cursor
+            cursor.close()
+
+        }catch (e: Exception){
+            return list
+        }
+            return list
+    }
 }
 
 
