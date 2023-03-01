@@ -12,7 +12,7 @@ import kotlin.coroutines.coroutineContext
 
 class GuestViewModel(application: Application): AndroidViewModel(application) {
 
-    private val guestRepository = GuestRepository.getInstance(application)
+    private val guestRepository = GuestRepository(application)
 
     private val guestModel = MutableLiveData<GuestModel>()
     val guest: LiveData<GuestModel> = guestModel
