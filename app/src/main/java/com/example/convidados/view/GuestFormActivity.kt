@@ -45,12 +45,13 @@ class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
 
 
 
-            val model = GuestModel(guestId, name, presence)
-
+            val model = GuestModel().apply {
+                this.id = guestId
+                this.name = name
+                this.presence = presence
+            }
 
             toast(model)
-
-
         }
     }
 
